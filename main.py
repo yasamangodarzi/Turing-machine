@@ -1,0 +1,188 @@
+# Turing machine state
+STATE = ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"]
+
+# Infinite tape
+SIZE = 100000
+# Turing_multiplication_machine n*n
+def Turing_multiplication_machine(array_input):
+    Now_State = STATE[0]
+    Pointer = int(SIZE / 2)
+    Reached_the_final_state = False
+    while not Reached_the_final_state:
+        if Now_State == "Q0":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[0]
+                Pointer += 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[1]
+                Pointer += 1
+
+        elif Now_State == "Q1":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[1]
+                Pointer += 1
+
+            elif array_input[Pointer] == 'B':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[2]
+                Pointer -= 1
+        elif Now_State == "Q2":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[2]
+                Pointer -= 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[3]
+                Pointer += 1
+        elif Now_State == "Q3":
+            if array_input[Pointer] == 'X':
+                array_input[Pointer] = 'X'
+                Now_State = STATE[3]
+                Pointer += 1
+            elif array_input[Pointer] == '0':
+                array_input[Pointer] = 'X'
+                Now_State = STATE[4]
+                Pointer -= 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'B'
+                Now_State = STATE[12]
+                Pointer += 1
+        elif Now_State == "Q4":
+            if array_input[Pointer] == 'X':
+                array_input[Pointer] = 'X'
+                Now_State = STATE[4]
+                Pointer -= 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[5]
+                Pointer -= 1
+        elif Now_State == "Q5":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = 'Y'
+                Now_State = STATE[6]
+                Pointer += 1
+            elif array_input[Pointer] == 'Y':
+                array_input[Pointer] = 'Y'
+                Now_State = STATE[5]
+                Pointer -= 1
+            elif array_input[Pointer] == 'B':
+                array_input[Pointer] = 'B'
+                Now_State = STATE[11]
+                Pointer += 1
+        elif Now_State == "Q6":
+            if array_input[Pointer] == 'Y':
+                array_input[Pointer] = 'Y'
+                Now_State = STATE[6]
+                Pointer += 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[7]
+                Pointer += 1
+        elif Now_State == "Q7":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[7]
+                Pointer += 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[8]
+                Pointer += 1
+            elif array_input[Pointer] == 'X':
+                array_input[Pointer] = 'X'
+                Now_State = STATE[7]
+                Pointer += 1
+        elif Now_State == "Q8":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[8]
+                Pointer += 1
+            elif array_input[Pointer] == 'B':
+                array_input[Pointer] = '0'
+                Now_State = STATE[9]
+                Pointer -= 1
+        elif Now_State == "Q9":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[9]
+                Pointer -= 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[10]
+                Pointer -= 1
+        elif Now_State == "Q10":
+            if array_input[Pointer] == '0':
+                array_input[Pointer] = '0'
+                Now_State = STATE[10]
+                Pointer -= 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[5]
+                Pointer -= 1
+            elif array_input[Pointer] == 'X':
+                array_input[Pointer] = 'X'
+                Now_State = STATE[10]
+                Pointer -= 1
+        elif Now_State == "Q11":
+            if array_input[Pointer] == 'Y':
+                array_input[Pointer] = '0'
+                Now_State = STATE[11]
+                Pointer += 1
+            elif array_input[Pointer] == 'C':
+                array_input[Pointer] = 'C'
+                Now_State = STATE[3]
+                Pointer += 1
+        elif Now_State == "Q12":
+            Reached_the_final_state = True
+    return Read_output(array_input, Pointer)
+
+# Read the output bar and get the product
+def Read_output(arr_, EndIndexPointer):
+    Empty_bar = False
+    check_bool = True
+    # result
+    Result = 0
+    # When the output is zero and we are now at the end of the bar
+    if arr_[EndIndexPointer] == 'B':
+        Empty_bar = True
+    while not Empty_bar:
+        if arr_[EndIndexPointer] == '0':
+            while check_bool:
+                EndIndexPointer += 1
+                Result += 1
+                if arr_[EndIndexPointer] != '0':
+                    check_bool = False
+                    Empty_bar = True
+        EndIndexPointer += 1
+    return Result
+
+# Make an input bar
+def create_input(number_1, number_2):
+    pointer = int(SIZE/2)
+    # Blank bar
+    arr_input = ['B'] * SIZE
+    # Write the first number on the Turing machine bar
+    for i in range(number_1):
+        arr_input[pointer] = '0'
+        pointer += 1
+    arr_input[pointer] = 'C'
+    pointer += 1
+    # Write the second number on the Turing machine bar
+    for i in range(number_2):
+        arr_input[pointer] = '0'
+        pointer += 1
+    return arr_input
+
+
+if __name__ == '__main__':
+    # initial value
+    Result_of_multiplied_2_numbers = 0
+    number = int(input("Please enter the input number:"))
+    input_arr = create_input(number, number)
+    for item in range(0, 4):
+        Result_of_multiplied_2_numbers = Turing_multiplication_machine(input_arr)
+        input_arr = create_input(Result_of_multiplied_2_numbers, number)
+    print(f"{number} ^ 5 = {Result_of_multiplied_2_numbers}")
